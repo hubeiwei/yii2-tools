@@ -1,0 +1,35 @@
+{
+    "name": "hubeiwei/yii2-tools",
+    "description": "自己在 yii2 上封装的一些东西",
+    "keywords": [
+        "yii2",
+        "extension",
+        "widget",
+        "tools"
+    ],
+    "homepage": "https://github.com/hubeiwei/yii2-tools",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "hubeiwei",
+            "email": "hubeiwei@hotmail.com",
+            "homepage": "http://hubeiwei.github.io"
+        }
+    ],
+    "require": {
+        "kartik-v/yii2-date-range": "dev-master",
+        "kartik-v/yii2-dynagrid": "@dev",
+        "kartik-v/yii2-export": "@dev",
+        "kartik-v/yii2-grid": "@dev",
+        "kartik-v/yii2-widget-alert": "*",
+        "kartik-v/yii2-widget-growl": "*",
+        "kartik-v/yii2-widget-select2": "@dev",
+        "liyunfang/yii2-widget-linkpager": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "hubeiwei\\yii2tools\\": ""
+        }
+    }
+}
