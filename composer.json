@@ -18,15 +18,15 @@
         }
     ],
     "require": {
-        "kartik-v/yii2-date-range": "dev-master",
-        "kartik-v/yii2-dynagrid": "@dev",
-        "kartik-v/yii2-export": "@dev",
-        "kartik-v/yii2-grid": "@dev",
-        "kartik-v/yii2-password": "@dev",
+        "kartik-v/yii2-date-range": "*",
+        "kartik-v/yii2-dynagrid": "*",
+        "kartik-v/yii2-export": "*",
+        "kartik-v/yii2-grid": "*",
+        "kartik-v/yii2-password": "*",
         "kartik-v/yii2-widget-alert": "*",
         "kartik-v/yii2-widget-growl": "*",
-        "kartik-v/yii2-widget-select2": "@dev",
-        "liyunfang/yii2-widget-linkpager": "dev-master"
+        "kartik-v/yii2-widget-select2": "*",
+        "liyunfang/yii2-widget-linkpager": "*"
     },
     "autoload": {
         "psr-4": {
