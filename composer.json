@@ -22,6 +22,7 @@
         "kartik-v/yii2-dynagrid": "@dev",
         "kartik-v/yii2-export": "@dev",
         "kartik-v/yii2-grid": "@dev",
+        "kartik-v/yii2-password": "@dev",
         "kartik-v/yii2-widget-alert": "*",
         "kartik-v/yii2-widget-growl": "*",
         "kartik-v/yii2-widget-select2": "@dev",
