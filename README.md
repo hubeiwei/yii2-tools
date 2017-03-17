@@ -4,7 +4,29 @@
 
 ## 安装
 
-建设中……你可以先使用 composer 的 autoload 来加载。
+执行：
+
+```
+composer require hubeiwei/yii2-tools dev-master
+```
+
+或者添加：
+
+```
+"hubeiwei/yii2-tools": "dev-master"
+```
+
+因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载下来，在 composer.json 里添加：
+
+```
+"autoload": {
+    "psr-4": {
+        "hubeiwei\\yii2tools\\": "path/to/hubeiwei/yii2-tools"
+    }
+}
+```
+
+然后执行 `composer dump-autoload` 即可。
 
 ## 使用
 
