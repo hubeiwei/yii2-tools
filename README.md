@@ -30,7 +30,146 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 
 ## 使用
 
-建设中……
+除了以下我给的一些使用方法，你也可以去看看[我的项目](https://github.com/hubeiwei/hello-yii2)。
+
+### 查询
+
+首先，你的 model 需要继承 `hubeiwei\yii2tools\extensions\ActiveRecord`，或使用 `hubeiwei\yii2tools\extensions\Query`。
+
+```php
+$query = User::find();
+// or
+$query = (new \hubeiwei\yii2tools\extensions\Query());
+
+$query->compare('money', 1)                                                    // WHERE money = 1
+    ->compare('money', '>1,,<3 =2')                                            // WHERE money > 1 AMD money < 3 AND money = 2
+    ->timeRangeFilter('time', '2017/01/01 - 2018/01/01', true)                 // WHERE time BETWEEM 1483200000 AND 1514822399
+    ->timeRangeFilter('time', '2017/01/01 01:01:01 - 2018/01/01 23:59:59');    // WHERE time BETWEEM 1483203661 AND 1514822399
+```
+
+### Widget
+
+你 model 的枚举字段可以这样写:
+
+```php
+const STATUS_ACTIVE = 1;
+const STATUS_INACTIVE = 0;
+public static $status_map = [
+    self::STATUS_ACTIVE => '启用',
+    self::STATUS_INACTIVE => '禁用',
+];
+```
+
+view:
+
+```php
+use common\models\User;
+use hubeiwei\yii2tools\grid\ActionColumn;
+use hubeiwei\yii2tools\grid\SerialColumn;
+use hubeiwei\yii2tools\helpers\RenderHelper;
+use hubeiwei\yii2tools\widgets\DateRangePicker;
+use hubeiwei\yii2tools\widgets\Select2;
+
+/**
+ * @var $this yii\web\View
+ * @var $searchModel app\models\search\ArticleSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
+
+$gridColumns = [
+    ['class' => SerialColumn::className()],
+
+    // 枚举字段过滤
+    [
+        'attribute' => 'status',
+        'value' => function ($model) {
+            return User::$status_map[$model->status];
+        },
+        'filterType' => Select2::className(),
+        'filterWidgetOptions' => [
+            'data' => User::$status_map,
+        ],
+    ],
+
+    // 时间范围过滤，查询参考上面的
+    [
+        'attribute' => 'created_at',
+        'format' => 'dateTime',
+        'filterType' => DateRangePicker::className(),
+    ],
+
+    ['class' => ActionColumn::className()],
+];
+
+// GridView
+echo RenderHelper::gridView($dataProvider, $gridColumns, $searchModel);
+
+// DynaGrid
+echo RenderHelper::dynaGrid('grid-id', $dataProvider, $gridColumns, $searchModel);
+```
+
+### 消息提示
+
+设置消息
+
+```php
+use hubeiwei\yii2tools\helpers\Message;
+
+\Yii::$app->session->setFlash(Message::TYPE_INFO, 'some message');
+// or
+Message::setSuccessMsg('success message');
+// or
+Message::setErrorMsg(['error1 message', 'error2 message']);
+```
+
+输出消息:
+
+```php
+use hubeiwei\yii2tools\widgets\Alert;
+use hubeiwei\yii2tools\widgets\Growl;
+
+echo Alert::widget();
+// or
+echo Growl::widget();
+```
+
+### 在 view 如何更好的引入 js 和 css 到布局
+
+来源：
+
+* [https://getyii.com/topic/9](https://getyii.com/topic/9)
+
+* [https://getyii.com/topic/10](https://getyii.com/topic/10)
+
+```php
+<?php
+use hubeiwei\yii2tools\widgets\CssBlock;
+use hubeiwei\yii2tools\widgets\JsBlock;
+use yii\web\View;
+
+/**
+ * @var $this yii\web\View
+ */
+?>
+
+<?php CssBlock::begin(); ?>
+<style>
+    .my-width {
+        width: 100%;
+    }
+</style>
+<?php CssBlock::end(); ?>
+
+<?php JsBlock::begin(['pos' => View::POS_END]); ?>
+<script>
+    function test() {
+        console.log("test");
+    }
+</script>
+<?php JsBlock::end(); ?>
+```
+
+> 原文：为什么要这么写？这样写的好处有两个，有代码提示和代码高亮。
 
 ## 打赏
 
