@@ -42,7 +42,7 @@ $query = User::find();
 $query = (new \hubeiwei\yii2tools\extensions\Query());
 
 $query->compare('money', 1)                                                    // WHERE money = 1
-    ->compare('money', '>1,,<3 =2')                                            // WHERE money > 1 AMD money < 3 AND money = 2
+    ->compare('money', '>1,,<3 =2')                                            // WHERE money > 1 AND money < 3 AND money = 2
     ->timeRangeFilter('time', '2017/01/01 - 2018/01/01', true)                 // WHERE time BETWEEM 1483200000 AND 1514822399
     ->timeRangeFilter('time', '2017/01/01 01:01:01 - 2018/01/01 23:59:59');    // WHERE time BETWEEM 1483203661 AND 1514822399
 ```
