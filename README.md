@@ -110,7 +110,7 @@ echo RenderHelper::dynaGrid('grid-id', $dataProvider, $gridColumns, $searchModel
 
 ### 消息提示
 
-设置消息
+设置消息：
 
 ```php
 use hubeiwei\yii2tools\helpers\Message;
@@ -122,7 +122,7 @@ Message::setSuccessMsg('success message');
 Message::setErrorMsg(['error1 message', 'error2 message']);
 ```
 
-输出消息:
+输出消息：
 
 ```php
 use hubeiwei\yii2tools\widgets\Alert;
@@ -133,13 +133,13 @@ echo Alert::widget();
 echo Growl::widget();
 ```
 
-### 在 view 如何更好的引入 js 和 css 到布局
+### 在 view 如何更好的把 js 和 css 注入到布局
 
 来源：
 
-* [https://getyii.com/topic/9](https://getyii.com/topic/9)
+* [Yii2 如何更好的在页面注入 JavaScript](https://getyii.com/topic/9)
 
-* [https://getyii.com/topic/10](https://getyii.com/topic/10)
+* [Yii2 如何更好的在页面注入 CSS](https://getyii.com/topic/10)
 
 ```php
 <?php
