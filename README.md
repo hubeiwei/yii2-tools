@@ -36,7 +36,7 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 
 首先，你的 model 需要继承 `hubeiwei\yii2tools\extensions\ActiveRecord`，或使用 `hubeiwei\yii2tools\extensions\Query`。
 
-```php
+```
 $query = User::find();
 // or
 $query = (new \hubeiwei\yii2tools\extensions\Query());
@@ -51,7 +51,7 @@ $query->compare('money', 1)                                                    /
 
 你 model 的枚举字段可以这样写:
 
-```php
+```
 const STATUS_ACTIVE = 1;
 const STATUS_INACTIVE = 0;
 public static $status_map = [
@@ -62,7 +62,7 @@ public static $status_map = [
 
 view:
 
-```php
+```
 use common\models\User;
 use hubeiwei\yii2tools\grid\ActionColumn;
 use hubeiwei\yii2tools\grid\SerialColumn;
@@ -112,7 +112,7 @@ echo RenderHelper::dynaGrid('grid-id', $dataProvider, $gridColumns, $searchModel
 
 设置消息：
 
-```php
+```
 use hubeiwei\yii2tools\helpers\Message;
 
 \Yii::$app->session->setFlash(Message::TYPE_INFO, 'some message');
@@ -124,7 +124,7 @@ Message::setErrorMsg(['error1 message', 'error2 message']);
 
 输出消息：
 
-```php
+```
 use hubeiwei\yii2tools\widgets\Alert;
 use hubeiwei\yii2tools\widgets\Growl;
 
@@ -141,7 +141,7 @@ echo Growl::widget();
 
 * [Yii2 如何更好的在页面注入 CSS](https://getyii.com/topic/10)
 
-```php
+```
 <?php
 use hubeiwei\yii2tools\widgets\CssBlock;
 use hubeiwei\yii2tools\widgets\JsBlock;
