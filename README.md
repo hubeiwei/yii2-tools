@@ -26,7 +26,7 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 }
 ```
 
-然后执行 `composer dump-autoload` 即可。
+然后把我 composer.json 文件里 require 的配置都加到你自己的 composer.json 里，执行 `composer update`。如果你已经有了这些包，直接执行 `composer dump-autoload` 即可。
 
 ## 使用
 
