@@ -96,6 +96,7 @@ $gridColumns = [
         'attribute' => 'created_at',
         'format' => 'dateTime',
         'filterType' => DateRangePicker::className(),
+        // 'filterWidgetOptions' => ['dateOnly' => true],
     ],
 
     ['class' => ActionColumn::className()],

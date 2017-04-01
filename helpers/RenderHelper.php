@@ -112,6 +112,7 @@ class RenderHelper
      * 根据业务来封装的 DynaGrid
      * DynaGrid 的模块配置可以参考我的：
      * @link https://github.com/hubeiwei/hello-yii2/blob/master/config/modules.php#L40
+     * 如果你像我一样用 db 来储存表格配置，需要执行 `php yii migrate --migrationPath=@kartik/dynagrid/migrations`
      *
      * @param $id string
      * @param $dataProvider \yii\data\ActiveDataProvider|\yii\data\ArrayDataProvider|\yii\data\SqlDataProvider
