@@ -1,6 +1,6 @@
 # yii2-tools
 
-自己在 yii2 上封装的一些东西，在公司也这么用，虽然不能满足所有人的口味，但如果你觉得好的话，你可以拿来用。以后我会花时间把这些东西做成比较通用可配置的。
+自己在 yii2 上封装的一些东西，在公司也这么用，虽然不能满足所有人的口味，写的代码也不认为很出彩，但如果你觉得好的话，你可以拿来用。以后我有空会花时间把这些东西做成比较通用可配置的。
 
 ## 安装
 
@@ -30,7 +30,7 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 
 ## 使用
 
-除了以下我给的一些使用方法，你也可以去看看[我的项目](https://github.com/hubeiwei/hello-yii2)。
+除了以下我给的一些使用方法，你也可以去看看[我的DEMO](https://github.com/hubeiwei/hello-yii2)。
 
 ### 查询
 
@@ -91,7 +91,7 @@ $gridColumns = [
         ],
     ],
 
-    // 时间范围过滤，查询参考上面的
+    // 时间范围过滤，查询的代码参考上面的 timeRangeFilter
     [
         'attribute' => 'created_at',
         'format' => 'dateTime',
