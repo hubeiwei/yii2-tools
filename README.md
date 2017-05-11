@@ -16,7 +16,7 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 "hubeiwei/yii2-tools": "1.0.x-dev"
 ```
 
-因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载下来，在 composer.json 里添加：
+因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载下来，添加：
 
 ```
 "autoload": {
@@ -26,7 +26,7 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 }
 ```
 
-然后把我 composer.json 文件里 require 的配置都加到你自己的 composer.json 里，执行 `composer update`。如果你已经有了这些包，直接执行 `composer dump-autoload` 即可。
+然后把我 composer.json 文件里 require 的包都加到你自己的 composer.json 里，执行 `composer update`。如果你已经有了这些包，直接执行 `composer dump-autoload` 即可。
 
 ## 使用
 
@@ -37,7 +37,7 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 首先，你的 model 需要继承 `hubeiwei\yii2tools\extensions\ActiveRecord`，或使用 `hubeiwei\yii2tools\extensions\Query`。
 
 ```
-$query = User::find();
+$query = \common\models\User::find();
 // or
 $query = (new \hubeiwei\yii2tools\extensions\Query());
 
@@ -52,12 +52,26 @@ $query->compare('money', 1)                                                    /
 你 model 的枚举字段可以这样写:
 
 ```
+use yii\helpers\ArrayHelper;
+
 const STATUS_ACTIVE = 1;
 const STATUS_INACTIVE = 0;
-public static $status_map = [
-    self::STATUS_ACTIVE => '启用',
-    self::STATUS_INACTIVE => '禁用',
-];
+
+/**
+ * @param int $value
+ * @return array|string|null
+ */
+public static function statusMap($value = -1)
+{
+    $map = [
+        self::STATUS_ACTIVE => '启用',
+        self::STATUS_INACTIVE => '禁用',
+    ];
+    if ($value == -1) {
+        return $map;
+    }
+    return ArrayHelper::getValue($map, $value);
+}
 ```
 
 view:
@@ -83,11 +97,11 @@ $gridColumns = [
     [
         'attribute' => 'status',
         'value' => function ($model) {
-            return User::$status_map[$model->status];
+            return User::statusMap($model->status);
         },
         'filterType' => Select2::className(),
         'filterWidgetOptions' => [
-            'data' => User::$status_map,
+            'data' => User::statusMap(),
         ],
     ],
 
@@ -144,6 +158,7 @@ echo Growl::widget();
 
 ```
 <?php
+
 use hubeiwei\yii2tools\widgets\CssBlock;
 use hubeiwei\yii2tools\widgets\JsBlock;
 use yii\web\View;
