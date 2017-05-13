@@ -48,24 +48,25 @@ trait QueryTrait
      *
      * @param string $attribute
      * @param string $value
-     * @param bool $date_only
+     * @param bool $dateOnly 输入的格式是否仅为日期（不包含时间），默认为 false
+     * @param bool $formatDate 日期格式化成时间戳，默认为 true
      * @return $this
      */
-    public function timeRangeFilter($attribute, $value, $date_only = false)
+    public function timeRangeFilter($attribute, $value, $dateOnly = false, $formatDate = true)
     {
         if ($value != '') {
             $value = "$value";
             $conditions = explode('-', $value);
 
-            $from = strtotime(trim($conditions[0]));
+            $from = $formatDate ? strtotime(trim($conditions[0])) : trim($conditions[0]);
             if (!$from || !isset($conditions[1])) {
                 return $this;
             }
 
-            if ($date_only) {
-                $to = strtotime(trim($conditions[1])) + 24 * 60 * 60 - 1;
+            if ($dateOnly) {
+                $to = $formatDate ? strtotime(trim($conditions[1])) + 24 * 60 * 60 - 1 : trim($conditions[1]) . ' 23:59:59';
             } else {
-                $to = strtotime(trim($conditions[1]));
+                $to = $formatDate ? strtotime(trim($conditions[1])) : trim($conditions[1]);
             }
 
             if (isset($conditions[0]) && isset($conditions[1])) {
