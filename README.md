@@ -148,6 +148,8 @@ echo Alert::widget();
 echo Growl::widget();
 ```
 
+> 建议放在布局里，一劳永逸
+
 ### 在 view 如何更好的把 js 和 css 注入到布局
 
 来源：
