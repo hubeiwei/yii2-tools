@@ -15,34 +15,30 @@ class RenderHelper
 {
     /**
      * GridView 枚举类字段搜索用到下拉框
-     * 使用 DynaGrid 的默认过滤时不会选中，需要使用 Select2
+     * 使用 DynaGrid 的默认过滤功能时不会选中，建议使用 Select2
      * @see \hubeiwei\yii2tools\widgets\Select2
      *
      * @param Model $model
      * @param string $attribute
      * @param array $map
      * @param array $options
-     * @return null|string
+     * @return string
      */
-    public static function dropDownFilter($model, $attribute, $map, $options = [])
+    public static function dropDownFilter(Model $model, $attribute, $map, $options = [])
     {
-        if ($model instanceof Model) {
-            $options = ArrayHelper::merge(
-                [
-                    'class' => ['form-control'],
-                    'style' => ['min-width' => '120px'],
-                ],
-                $options
-            );
-            return Html::dropDownList(
-                $model->formName() . '[' . $attribute . ']',
-                $model->$attribute,
-                ['' => '全部'] + $map,
-                $options
-            );
-        } else {
-            return null;
-        }
+        $options = ArrayHelper::merge(
+            [
+                'class' => ['form-control'],
+                'style' => ['min-width' => '120px'],
+            ],
+            $options
+        );
+        return Html::dropDownList(
+            $model->formName() . '[' . $attribute . ']',
+            $model->{$attribute},
+            ['' => '全部'] + $map,
+            $options
+        );
     }
 
     /**
