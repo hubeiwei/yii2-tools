@@ -30,21 +30,52 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 
 ## 使用
 
-除了以下我给的一些使用方法，你也可以去看看[我的DEMO](https://github.com/hubeiwei/hello-yii2)。
+除了以下我给的一些使用方法，你也可以去看看[我的 DEMO](https://github.com/hubeiwei/hello-yii2)。
 
 ### 查询
 
 首先，你的 model 需要继承 `hubeiwei\yii2tools\extensions\ActiveRecord`，或使用 `hubeiwei\yii2tools\extensions\Query`。
 
+实例化 `ActiveQuery` 或 `Query`：
+
 ```
 $query = \common\models\User::find();
 // or
 $query = (new \hubeiwei\yii2tools\extensions\Query());
+```
 
-$query->compare('money', 1)                                                    // WHERE money = 1
-    ->compare('money', '>1,,<3 =2')                                            // WHERE money > 1 AND money < 3 AND money = 2
-    ->timeRangeFilter('time', '2017/01/01 - 2018/01/01', true)                 // WHERE time BETWEEM 1483200000 AND 1514822399
-    ->timeRangeFilter('time', '2017/01/01 01:01:01 - 2018/01/01 23:59:59');    // WHERE time BETWEEM 1483203661 AND 1514822399
+数字对比：
+
+```
+// WHERE money = 1
+$query->compare('money', 1);
+
+// WHERE money > 1 AND money < 3 AND money = 2
+$query->compare('money', '>1,,<3 =2');
+```
+
+日期范围过滤：
+
+```
+$dateRange = '2017/01/01 - 2018/01/01';
+
+// WHERE time BETWEEM 1483200000 AND 1514822399
+$query->timeRangeFilter('time', $dateRange, true);
+
+// WHERE time BETWEEM 2017/01/01 AND 2018/01/01
+$query->timeRangeFilter('time', $dateRange, true, false);
+```
+
+时间范围过滤：
+
+```
+$dateTimeRange = '2017/01/01 01:01:01 - 2018/01/01 23:59:59';
+
+// WHERE time BETWEEM 1483203661 AND 1514822399
+$query->timeRangeFilter('time', $dateTimeRange);
+
+// WHERE time BETWEEM 2017/01/01 01:01:01 AND 2018/01/01 23:59:59
+$query->timeRangeFilter('time', $dateTimeRange, false, false);
 ```
 
 ### Widget
