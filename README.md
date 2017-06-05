@@ -93,7 +93,16 @@ use hubeiwei\yii2tools\widgets\Select2;
 $gridColumns = [
     ['class' => SerialColumn::className()],
 
-    // 枚举字段过滤
+    // 枚举字段过滤（Html::dropDownList）
+    [
+        'attribute' => 'status',
+        'value' => function ($model) {
+            return User::statusMap($model->status);
+        },
+        'filter' => RenderHelper::dropDownFilter($searchModel, 'status', User::statusMap()),
+    ],
+
+    // 枚举字段过滤（Select2）
     [
         'attribute' => 'status',
         'value' => function ($model) {
@@ -123,6 +132,14 @@ echo RenderHelper::gridView($dataProvider, $gridColumns, $searchModel);
 echo RenderHelper::dynaGrid('grid-id', $dataProvider, $gridColumns, $searchModel);
 ```
 
+本节示例插件的 DEMO：
+
+* [Select2](http://demos.krajee.com/widget-details/select2)
+* [DateRangePicker](http://demos.krajee.com/date-range)
+* [GridView](http://demos.krajee.com/grid-demo)
+* [DynaGrid](http://demos.krajee.com/dynagrid-demo)
+* [Export](http://demos.krajee.com/export-demo)：使用 `RenderHelper::gridView()` 时需要把 $hasExport 参数设置为 true 才能使用导出，而 `RenderHelper::dynaGrid()` 我让它直接使用了
+
 ### 消息提示
 
 设置消息：
@@ -149,6 +166,11 @@ echo Growl::widget();
 ```
 
 > 建议放在布局里，一劳永逸
+
+本节示例插件的 DEMO：
+
+* [Alert](http://v3.bootcss.com/components/#alerts)：这个没啥好说的，就是 bootstrap 的 Alert
+* [Growl](http://demos.krajee.com/widget-details/growl)：进去之后看到一个表单，提交后可以看到 Demo
 
 ### 在 view 如何更好的把 js 和 css 注入到布局
 
