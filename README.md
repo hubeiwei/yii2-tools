@@ -131,6 +131,7 @@ $gridColumns = [
             return User::statusMap($model->status);
         },
         'filter' => RenderHelper::dropDownFilter($searchModel, 'status', User::statusMap()),
+        // 当然你在 filter 这里直接给 User::statusMap() 也可以，你对比一下就发现两种方法的区别了
     ],
 
     // 枚举字段过滤（Select2）
