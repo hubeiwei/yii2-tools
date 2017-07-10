@@ -10,54 +10,77 @@ use yii\web\JsExpression;
 class DateRangePicker extends KartikDateRangePicker
 {
     public $convertFormat = true;
-
     public $presetDropdown = true;
-
     /**
      * @var bool 根据该属性决定默认配置
      */
     public $dateOnly = false;
+    /**
+     * @var string 日期格式，如不配置则会根据 $dateOnly 来分配'Y/m/d'或'Y/m/d H:i:s'
+     */
+    public $dateFormat;
+    /**
+     * @var string 两个日期之间的分隔符
+     */
+    public $separator = ' - ';
 
     /**
      * @inheritdoc
      */
-    public function run()
+    protected function initSettings()
     {
-        $basePluginOptions = [
+        $this->pluginOptions = ArrayHelper::merge(
+            $this->defaultPluginSettings(),
+            $this->pluginOptions
+        );
+        parent::initSettings();
+    }
+
+    /**
+     * 这个类的作用就是为了减少调用时的配置，所以我会写死一些默认的配置
+     *
+     * @return array
+     */
+    protected function defaultPluginSettings()
+    {
+        $format = $this->dateFormat;
+        $pluginOptions = [
             'showDropdowns' => true,
             'opens' => 'left',
             'locale' => [
-                'separator' => ' - ',
+                'separator' => $this->separator,
             ],
         ];
         if ($this->dateOnly === false) {
-            $basePluginOptions = ArrayHelper::merge(
-                $basePluginOptions,
+            if($format == null){
+                $format = 'Y/m/d H:i:s';
+            }
+            $pluginOptions = ArrayHelper::merge(
+                $pluginOptions,
                 [
                     'timePicker' => true,
                     'timePicker24Hour' => true,
                     'timePickerIncrement' => 1,
                     'timePickerSeconds' => true,
                     'locale' => [
-                        'format' => 'Y/m/d H:i:s',
+                        'format' => $format,
                     ],
                 ]
             );
         } else {
-            $basePluginOptions = ArrayHelper::merge(
-                $basePluginOptions,
+            if($format == null){
+                $format = 'Y/m/d';
+            }
+            $pluginOptions = ArrayHelper::merge(
+                $pluginOptions,
                 [
                     'locale' => [
-                        'format' => 'Y/m/d',
+                        'format' => $format,
                     ],
                 ]
             );
         }
-        $this->pluginOptions = ArrayHelper::merge(
-            $basePluginOptions,
-            $this->pluginOptions
-        );
-        parent::run();
+        return $pluginOptions;
     }
 
     /**

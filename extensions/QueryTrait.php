@@ -6,6 +6,8 @@ use hubeiwei\yii2tools\helpers\Helper;
 
 trait QueryTrait
 {
+    public $timeRangeSeparator = ' - ';
+
     /**
      * @param string $attribute
      *
@@ -56,10 +58,13 @@ trait QueryTrait
     {
         if ($value != '') {
             $value = "$value";
-            $conditions = explode('-', $value);
+            $conditions = explode($this->timeRangeSeparator, $value);
+            if (count($conditions) != 2) {
+                return $this;
+            }
 
-            $from = $formatDate ? strtotime(trim($conditions[0])) : trim($conditions[0]);
-            if (!$from || !isset($conditions[1])) {
+            $from = $formatDate ? strtotime(trim($conditions[0])) : trim($conditions[0]) . ' 00:00:00';
+            if ($from == false) {
                 return $this;
             }
 
@@ -68,10 +73,11 @@ trait QueryTrait
             } else {
                 $to = $formatDate ? strtotime(trim($conditions[1])) : trim($conditions[1]);
             }
-
-            if (isset($conditions[0]) && isset($conditions[1])) {
-                $this->andFilterWhere(['between', $attribute, $from, $to]);
+            if ($from == false) {
+                return $this;
             }
+
+            $this->andFilterWhere(['between', $attribute, $from, $to]);
         }
         return $this;
     }

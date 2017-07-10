@@ -2,6 +2,7 @@
 
 namespace hubeiwei\yii2tools\extensions;
 
+use Yii;
 use yii\db\ActiveRecord as YiiActiveRecord;
 
 class ActiveRecord extends YiiActiveRecord
@@ -11,7 +12,7 @@ class ActiveRecord extends YiiActiveRecord
      */
     public static function find()
     {
-        return new ActiveQuery(get_called_class());
+        return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
     }
 
     /**

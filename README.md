@@ -2,6 +2,8 @@
 
 自己在 yii2 上封装的一些东西，在公司也这么用，虽然不能满足所有人的口味，写的代码也不认为很出彩，但如果你觉得好的话，你可以拿来用。以后我有空会花时间把这些东西做成比较通用可配置的。
 
+除了以下我给的一些使用方法，你也可以去看看[我的 DEMO](https://github.com/hubeiwei/hello-yii2)。
+
 ## 安装
 
 执行：
@@ -28,25 +30,81 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 
 然后把我 composer.json 文件里 require 的包都加到你自己的 composer.json 里，执行 `composer update`。如果你已经有了这些包，直接执行 `composer dump-autoload` 即可。
 
-## 使用
+## model
 
-除了以下我给的一些使用方法，你也可以去看看[我的 DEMO](https://github.com/hubeiwei/hello-yii2)。
+`ActiveQuery` 和 `Query` 类通过 `hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait` 来获得数字范围过滤以及日期范围过滤的功能。
+
+### 配置
+
+日期范围过滤的默认分割字符串是“ - ”，以下提供了 `ActiveRecord` 类在两种情况下修改这个配置的方法。
+
+1:如果你 model 继承的类还是 `yii\db\ActiveRecord`，你可以改成 `hubeiwei\yii2tools\extensions\ActiveRecord`，然后你可以在你的 bootstrap.php 文件通过 DI 容器来配置：
+
+```php
+Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
+    'timeRangeSeparator' => ' - ',
+]);
+```
+
+> basic 模板没有 bootstrap.php 文件，可以参考 advanced 模板。
+
+2:如果你已经有了自己的 `ActiveRecord` 类，但并没有 `ActiveQuery` 类，你可以重写 `find()` 方法改成类似如下的代码：
+
+```php
+public static function find()
+{
+    return Yii::createObject('hubeiwei\yii2tools\extensions\ActiveQuery', [
+        get_called_class(),
+        // 如果你想把这段配置和你当前代码分离，参考上面第一种方法。
+        [
+            'timeRangeSeparator' => ' - ',
+        ],
+    );
+}
+```
+
+如果你已经有了自己的 `ActiveQuery` 和 `Query` 类，你可以直接引入我的 trait：`\hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait`，`ActiveQuery` 的配置方法参考上面两种方法，`Query` 类的配置方法在下面例子会有提到。
 
 ### 查询
 
-首先，你的 model 需要继承 `hubeiwei\yii2tools\extensions\ActiveRecord`，或使用 `hubeiwei\yii2tools\extensions\Query`。
-
 实例化 `ActiveQuery` 或 `Query`：
 
-```
+```php
 $query = \common\models\User::find();
 // or
-$query = (new \hubeiwei\yii2tools\extensions\Query());
+$query = new \hubeiwei\yii2tools\extensions\Query([
+    'timeRangeSeparator' => ' - ',
+]);
 ```
 
-数字对比：
+`Query` 类还有更多的实例化方法，例如在 bootstrap.php 文件通过 DI 容器来配置，并可以通过注释来提供代码提示：
 
+```php
+use hubeiwei\yii2tools\extensions\Query;
+
+/** @var $query Query */
+
+// 设置
+Yii::$container->set(Query::className(), [
+    'timeRangeSeparator' => ' - ',
+]);
+// 实例化
+$query = Yii::createObject(Query::className());
+$query = Yii::$container->get(Query::className());
+
+// 设置
+Yii::$container->set('query', function () {
+    return new \hubeiwei\yii2tools\extensions\Query([
+        'timeRangeSeparator' => '-',
+    ]);
+});
+// 实例化
+$query = Yii::$container->get('query');
 ```
+
+数字范围过滤：
+
+```php
 // WHERE money = 1
 $query->compare('money', 1);
 
@@ -56,33 +114,33 @@ $query->compare('money', '>1,,<3 =2');
 
 日期范围过滤：
 
-```
+```php
 $dateRange = '2017/01/01 - 2018/01/01';
 
 // WHERE time BETWEEM 1483200000 AND 1514822399
 $query->timeRangeFilter('time', $dateRange, true);
 
-// WHERE time BETWEEM 2017/01/01 AND 2018/01/01
+// WHERE time BETWEEM '2017/01/01 00:00:00' AND '2018/01/01 23:59:59'
 $query->timeRangeFilter('time', $dateRange, true, false);
 ```
 
 时间范围过滤：
 
-```
+```php
 $dateTimeRange = '2017/01/01 01:01:01 - 2018/01/01 23:59:59';
 
 // WHERE time BETWEEM 1483203661 AND 1514822399
 $query->timeRangeFilter('time', $dateTimeRange);
 
-// WHERE time BETWEEM 2017/01/01 01:01:01 AND 2018/01/01 23:59:59
+// WHERE time BETWEEM '2017/01/01 01:01:01' AND '2018/01/01 23:59:59'
 $query->timeRangeFilter('time', $dateTimeRange, false, false);
 ```
 
-### Widget
+## widget
 
 你 model 的枚举字段可以这样写:
 
-```
+```php
 use yii\helpers\ArrayHelper;
 
 const STATUS_ACTIVE = 1;
@@ -107,7 +165,7 @@ public static function statusMap($value = -1)
 
 view:
 
-```
+```php
 use common\models\User;
 use hubeiwei\yii2tools\grid\ActionColumn;
 use hubeiwei\yii2tools\grid\SerialColumn;
@@ -146,12 +204,15 @@ $gridColumns = [
         ],
     ],
 
-    // 时间范围过滤，查询的代码参考上面的 timeRangeFilter
+    // 时间范围过滤，查询的代码已经在上面有给出
     [
         'attribute' => 'created_at',
         'format' => 'dateTime',
         'filterType' => DateRangePicker::className(),
-        // 'filterWidgetOptions' => ['dateOnly' => true],
+        /*'filterWidgetOptions' => [
+            'dateOnly' => true,
+            'dateFormat' => 'Y/m/d',
+        ],*/
     ],
 
     ['class' => ActionColumn::className()],
@@ -172,11 +233,11 @@ echo RenderHelper::dynaGrid('grid-id', $dataProvider, $gridColumns, $searchModel
 * [DynaGrid](http://demos.krajee.com/dynagrid-demo)
 * [Export](http://demos.krajee.com/export-demo)：使用 `RenderHelper::gridView()` 时需要把 $hasExport 参数设置为 true 才能使用导出，而 `RenderHelper::dynaGrid()` 我让它直接使用了
 
-### 消息提示
+## 消息提示
 
 设置消息：
 
-```
+```php
 use hubeiwei\yii2tools\helpers\Message;
 
 \Yii::$app->session->setFlash(Message::TYPE_INFO, 'some message');
@@ -188,7 +249,7 @@ Message::setErrorMsg(['error1 message', 'error2 message']);
 
 输出消息：
 
-```
+```php
 use hubeiwei\yii2tools\widgets\Alert;
 use hubeiwei\yii2tools\widgets\Growl;
 
@@ -204,7 +265,7 @@ echo Growl::widget();
 * [Alert](http://v3.bootcss.com/components/#alerts)：这个没啥好说的，就是 bootstrap 的 Alert
 * [Growl](http://demos.krajee.com/widget-details/growl)：进去之后看到一个表单，提交后可以看到 Demo
 
-### 在 view 如何更好的把 js 和 css 注入到布局
+## 在 view 如何更好的把 js 和 css 注入到布局
 
 来源：
 
@@ -212,7 +273,7 @@ echo Growl::widget();
 
 * [Yii2 如何更好的在页面注入 CSS](https://getyii.com/topic/10)
 
-```
+```php
 <?php
 
 use hubeiwei\yii2tools\widgets\CssBlock;
