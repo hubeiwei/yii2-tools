@@ -59,7 +59,7 @@ public static function find()
         [
             'timeRangeSeparator' => ' - ',
         ],
-    );
+    ]);
 }
 ```
 
@@ -75,31 +75,6 @@ $query = \common\models\User::find();
 $query = new \hubeiwei\yii2tools\extensions\Query([
     'timeRangeSeparator' => ' - ',
 ]);
-```
-
-`Query` 类还有更多的实例化方法，例如在 bootstrap.php 文件通过 DI 容器来配置，并可以通过注释来提供代码提示：
-
-```php
-use hubeiwei\yii2tools\extensions\Query;
-
-/** @var $query Query */
-
-// 设置
-Yii::$container->set(Query::className(), [
-    'timeRangeSeparator' => ' - ',
-]);
-// 实例化
-$query = Yii::createObject(Query::className());
-$query = Yii::$container->get(Query::className());
-
-// 设置
-Yii::$container->set('query', function () {
-    return new \hubeiwei\yii2tools\extensions\Query([
-        'timeRangeSeparator' => '-',
-    ]);
-});
-// 实例化
-$query = Yii::$container->get('query');
 ```
 
 数字范围过滤：
@@ -134,6 +109,31 @@ $query->timeRangeFilter('time', $dateTimeRange);
 
 // WHERE time BETWEEM '2017/01/01 01:01:01' AND '2018/01/01 23:59:59'
 $query->timeRangeFilter('time', $dateTimeRange, false, false);
+```
+
+附：`Query` 类还有更多的实例化方法，例如在 bootstrap.php 文件通过 DI 容器来配置，并可以通过注释来提供代码提示：
+
+```php
+use hubeiwei\yii2tools\extensions\Query;
+
+/** @var $query Query */
+
+// 设置
+Yii::$container->set(Query::className(), [
+    'timeRangeSeparator' => ' - ',
+]);
+// 实例化
+$query = Yii::createObject(Query::className());
+$query = Yii::$container->get(Query::className());
+
+// 设置
+Yii::$container->set('query', function () {
+    return new \hubeiwei\yii2tools\extensions\Query([
+        'timeRangeSeparator' => '-',
+    ]);
+});
+// 实例化
+$query = Yii::$container->get('query');
 ```
 
 ## widget
