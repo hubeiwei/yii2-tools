@@ -1,8 +1,10 @@
 # yii2-tools
 
-自己在 yii2 上封装的一些东西，在公司也这么用，虽然不能满足所有人的口味，写的代码也不认为很出彩，但如果你觉得好的话，你可以拿来用。以后我有空会花时间把这些东西做成比较通用可配置的。
+自己在 yii2 上根据使用习惯来封装的一些东西，具体功能直接往下看吧。以后我有空会花时间把这些东西做成更灵活的可配置的。
 
 除了以下我给的一些使用方法，你也可以去看看[我的 DEMO](https://github.com/hubeiwei/hello-yii2)。
+
+> 语文不好，你看到这句话说明我已经大改了一次。
 
 ## 安装
 
@@ -34,19 +36,9 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 
 `ActiveQuery` 和 `Query` 类通过 `hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait` 来获得数字范围过滤以及日期范围过滤的功能。
 
-### 配置
+使用方法有以下3种：
 
-日期范围过滤的默认分割字符串是“ - ”，以下提供了 `ActiveRecord` 类在两种情况下修改这个配置的方法。
-
-1:如果你 model 继承的类还是 `yii\db\ActiveRecord`，你可以改成 `hubeiwei\yii2tools\extensions\ActiveRecord`，然后你可以在你的 bootstrap.php 文件通过 DI 容器来配置：
-
-```php
-Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
-    'timeRangeSeparator' => ' - ',
-]);
-```
-
-> basic 模板没有 bootstrap.php 文件，可以参考 advanced 模板。
+1:如果你 model 继承的类还是 `yii\db\ActiveRecord`，你可以改成 `hubeiwei\yii2tools\extensions\ActiveRecord`。
 
 2:如果你已经有了自己的 `ActiveRecord` 类，但并没有 `ActiveQuery` 类，你可以重写 `find()` 方法改成类似如下的代码：
 
@@ -55,15 +47,34 @@ public static function find()
 {
     return Yii::createObject('hubeiwei\yii2tools\extensions\ActiveQuery', [
         get_called_class(),
-        // 如果你想把这段配置和你当前代码分离，参考上面第一种方法。
+        // 如果你想把下面的配置在这段代码里分离，就继续往下看。
         [
-            'timeRangeSeparator' => ' - ',
+            'timeRangeSeparator' => '~',
         ],
     ]);
 }
 ```
 
-如果你已经有了自己的 `ActiveQuery` 和 `Query` 类，你可以直接引入我的 trait：`\hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait`，`ActiveQuery` 的配置方法参考上面两种方法，`Query` 类的配置方法在下面例子会有提到。
+3:如果你已经有了自己的 `ActiveQuery` 和 `Query` 类，你可以直接引入我的 trait：`\hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait`。
+
+### 配置
+
+日期范围过滤的默认分割字符串是“-”，如果你想修改这个配置，方法如下：
+
+1:常规方法，在 `ActiveRecord::find()` 方法里实例化后重新赋值后返回（就是使用方法里的第2条），或者在调用这个方法后重新赋值。
+
+2:DI 容器，在你的 bootstrap.php 文件添加以下代码：
+
+```php
+// 因为存在上面的第3种使用方法，这里配置的类需要根据你具体用到的 `ActiveQuery` 类而定。
+Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
+    'timeRangeSeparator' => '~',
+]);
+```
+
+> basic 模板没有 bootstrap.php 文件，可以参考 advanced 模板。
+
+`Query` 类可以在实例化之后修改，也可以继续往下看其他修改方法。
 
 ### 查询
 
@@ -73,7 +84,7 @@ public static function find()
 $query = \common\models\User::find();
 // or
 $query = new \hubeiwei\yii2tools\extensions\Query([
-    'timeRangeSeparator' => ' - ',
+    'timeRangeSeparator' => '~',
 ]);
 ```
 
@@ -111,7 +122,7 @@ $query->timeRangeFilter('time', $dateTimeRange);
 $query->timeRangeFilter('time', $dateTimeRange, false, false);
 ```
 
-附：`Query` 类还有更多的实例化方法，例如在 bootstrap.php 文件通过 DI 容器来配置，并可以通过注释来提供代码提示：
+附：`Query` 类还有更多的实例化方法，例如通过 DI 容器来配置，并可以通过注释来提供代码提示：
 
 ```php
 use hubeiwei\yii2tools\extensions\Query;
@@ -120,7 +131,7 @@ use hubeiwei\yii2tools\extensions\Query;
 
 // 设置
 Yii::$container->set(Query::className(), [
-    'timeRangeSeparator' => ' - ',
+    'timeRangeSeparator' => '~',
 ]);
 // 实例化
 $query = Yii::createObject(Query::className());
@@ -129,16 +140,18 @@ $query = Yii::$container->get(Query::className());
 // 设置
 Yii::$container->set('query', function () {
     return new \hubeiwei\yii2tools\extensions\Query([
-        'timeRangeSeparator' => '-',
+        'timeRangeSeparator' => '~',
     ]);
 });
 // 实例化
 $query = Yii::$container->get('query');
 ```
 
+> 设置是在 bootstrap.php 文件进行的。
+
 ## widget
 
-你 model 的枚举字段可以这样写:
+下面代码是枚举字段查询用到的，仅仅是提供一种方便维护的参考，如果你有自己的解决方案可以跳过。
 
 ```php
 use yii\helpers\ArrayHelper;
@@ -150,13 +163,13 @@ const STATUS_INACTIVE = 0;
  * @param int $value
  * @return array|string|null
  */
-public static function statusMap($value = -1)
+public static function statusMap($value = null)
 {
     $map = [
         self::STATUS_ACTIVE => '启用',
         self::STATUS_INACTIVE => '禁用',
     ];
-    if ($value == -1) {
+    if ($value == null) {
         return $map;
     }
     return ArrayHelper::getValue($map, $value);
@@ -182,7 +195,7 @@ use hubeiwei\yii2tools\widgets\Select2;
 $gridColumns = [
     ['class' => SerialColumn::className()],
 
-    // 枚举字段过滤（Html::dropDownList）
+    // 枚举字段过滤（Html::dropDownList()）
     [
         'attribute' => 'status',
         'value' => function ($model) {
@@ -212,6 +225,7 @@ $gridColumns = [
         /*'filterWidgetOptions' => [
             'dateOnly' => true,
             'dateFormat' => 'Y/m/d',
+            'separator' => ' ~ ',
         ],*/
     ],
 

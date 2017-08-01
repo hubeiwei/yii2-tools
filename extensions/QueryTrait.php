@@ -6,7 +6,7 @@ use hubeiwei\yii2tools\helpers\Helper;
 
 trait QueryTrait
 {
-    public $timeRangeSeparator = ' - ';
+    public $timeRangeSeparator = '-';
 
     /**
      * @param string $attribute

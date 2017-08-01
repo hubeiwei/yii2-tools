@@ -7,6 +7,9 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 
+/**
+ * 这个类是为了减少调用时的配置量，所以我会写死一些默认的配置，以及减少一些配置的层数
+ */
 class DateRangePicker extends KartikDateRangePicker
 {
     public $convertFormat = true;
@@ -30,18 +33,13 @@ class DateRangePicker extends KartikDateRangePicker
     protected function initSettings()
     {
         $this->pluginOptions = ArrayHelper::merge(
-            $this->defaultPluginSettings(),
+            $this->defaultPluginOptions(),
             $this->pluginOptions
         );
         parent::initSettings();
     }
 
-    /**
-     * 这个类的作用就是为了减少调用时的配置，所以我会写死一些默认的配置
-     *
-     * @return array
-     */
-    protected function defaultPluginSettings()
+    protected function defaultPluginOptions()
     {
         $format = $this->dateFormat;
         $pluginOptions = [
@@ -52,7 +50,7 @@ class DateRangePicker extends KartikDateRangePicker
             ],
         ];
         if ($this->dateOnly === false) {
-            if($format == null){
+            if ($format == null) {
                 $format = 'Y/m/d H:i:s';
             }
             $pluginOptions = ArrayHelper::merge(
@@ -68,7 +66,7 @@ class DateRangePicker extends KartikDateRangePicker
                 ]
             );
         } else {
-            if($format == null){
+            if ($format == null) {
                 $format = 'Y/m/d';
             }
             $pluginOptions = ArrayHelper::merge(
