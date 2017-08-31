@@ -138,6 +138,11 @@ $query = Yii::createObject(Query::className());
 $query = Yii::$container->get(Query::className());
 
 // 设置
+Yii::$container->set('query', [
+    'class' => 'hubeiwei\yii2tools\extensions\Query',
+    'timeRangeSeparator' => '~',
+]);
+// 或
 Yii::$container->set('query', function () {
     return new \hubeiwei\yii2tools\extensions\Query([
         'timeRangeSeparator' => '~',
@@ -147,7 +152,7 @@ Yii::$container->set('query', function () {
 $query = Yii::$container->get('query');
 ```
 
-> 设置是在 bootstrap.php 文件进行的。
+> 设置这一步是在 bootstrap.php 文件进行的。
 
 ## widget
 
