@@ -2,8 +2,6 @@
 
 namespace hubeiwei\yii2tools\extensions;
 
-use Yii;
-
 trait QueryCacheTrait
 {
     /**
@@ -30,18 +28,5 @@ trait QueryCacheTrait
         $this->queryCacheDuration = $duration;
         $this->queryCacheDependency = $dependency;
         return $this;
-    }
-
-    /**
-     * @see \yii\db\Query::createCommand()
-     */
-    public function createCommand($db = null)
-    {
-        if ($db === null) {
-            $db = Yii::$app->getDb();
-        }
-        $command = parent::createCommand($db);
-        $command->cache($this->queryCacheDuration, $this->queryCacheDependency);
-        return $command;
     }
 }

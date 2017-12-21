@@ -9,6 +9,7 @@ class ActiveQuery extends YiiActiveQuery
     use QueryTrait;
     use QueryCacheTrait;
 
+
     /**
      * @inheritdoc
      */
@@ -20,7 +21,9 @@ class ActiveQuery extends YiiActiveQuery
             $db = $modelClass::getDb();
         }
         $command = parent::createCommand($db);
-        $command->cache($this->queryCacheDuration, $this->queryCacheDependency);
+        if ($this->queryCacheDuration !== null || $this->queryCacheDependency !== null) {
+            $command->cache($this->queryCacheDuration, $this->queryCacheDependency);
+        }
         return $command;
     }
 }
