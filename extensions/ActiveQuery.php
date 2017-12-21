@@ -39,8 +39,7 @@ class ActiveQuery extends YiiActiveQuery
         }
 
         if ($this->sql === null) {
-            // TODO this will go to `yii\db\Query`
-            return parent::queryScalar($selectExpression, $db);
+            return $this->_queryScalar($selectExpression, $db);
         }
 
         $command = (new Query())->select([$selectExpression])
