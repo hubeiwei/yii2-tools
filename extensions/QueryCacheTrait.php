@@ -33,10 +33,7 @@ trait QueryCacheTrait
     }
 
     /**
-     * Creates a DB command that can be used to execute this query.
-     * @param \yii\db\Connection $db the database connection used to generate the SQL statement.
-     * If this parameter is not given, the `db` application component will be used.
-     * @return \yii\db\Command the created DB command instance.
+     * @see \yii\db\Query::createCommand()
      */
     public function createCommand($db = null)
     {
@@ -44,10 +41,7 @@ trait QueryCacheTrait
             $db = Yii::$app->getDb();
         }
         $command = parent::createCommand($db);
-        if ($this->queryCacheDuration !== null || $this->queryCacheDependency !== null) {
-            $command->queryCacheDuration = $this->queryCacheDuration === null ? $db->queryCacheDuration : $this->queryCacheDuration;
-            $command->queryCacheDependency = $this->queryCacheDependency;
-        }
+        $command->cache($this->queryCacheDuration, $this->queryCacheDependency);
         return $command;
     }
 }

@@ -10,10 +10,7 @@ class ActiveQuery extends YiiActiveQuery
     use QueryCacheTrait;
 
     /**
-     * Creates a DB command that can be used to execute this query.
-     * @param \yii\db\Connection|null $db the DB connection used to create the DB command.
-     * If `null`, the DB connection returned by [[modelClass]] will be used.
-     * @return \yii\db\Command the created DB command instance.
+     * @inheritdoc
      */
     public function createCommand($db = null)
     {
@@ -23,10 +20,7 @@ class ActiveQuery extends YiiActiveQuery
             $db = $modelClass::getDb();
         }
         $command = parent::createCommand($db);
-        if ($this->queryCacheDuration !== null || $this->queryCacheDependency !== null) {
-            $command->queryCacheDuration = $this->queryCacheDuration === null ? $db->queryCacheDuration : $this->queryCacheDuration;
-            $command->queryCacheDependency = $this->queryCacheDependency;
-        }
+        $command->cache($this->queryCacheDuration, $this->queryCacheDependency);
         return $command;
     }
 }
