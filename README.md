@@ -90,7 +90,7 @@ $query = new \hubeiwei\yii2tools\extensions\Query([
 
 缓存：
 
-Command 能使用查询缓存，而且***每次***查询都会事先检查缓存，Query 和 ActiveQuery 查询是通过 createCommand 来使用 Command 查询的，但这两个类并不能设置缓存，所以我做了一些修改。
+Command 能使用查询缓存，而且**每次**查询都会事先检查缓存，Query 和 ActiveQuery 查询是通过 createCommand 来使用 Command 查询的，但这两个类并不能设置缓存，所以我做了一些修改。
 
 开启缓存的配置其实已经默认给你开好了，如果禁用掉的话查询就不会检查缓存了。
 
