@@ -90,7 +90,40 @@ $query = new \hubeiwei\yii2tools\extensions\Query([
 
 缓存：
 
+Command 能使用查询缓存，而且***每次***查询都会事先检查缓存，Query 和 ActiveQuery 查询是通过 createCommand 来使用 Command 查询的，但这两个类并不能设置缓存，所以我做了一些修改。
+
+开启缓存的配置其实已经默认给你开好了，如果禁用掉的话查询就不会检查缓存了。
+
+```php
+'components' => [
+    'db' => [
+		'class' => 'yii\db\Connection',
+		'dsn' => 'mysql:host=127.0.0.1;dbname=yii2',
+		'username' => 'root',
+		'password' => '123456',
+		'charset' => 'utf8',
+		// 以下3行都是默认值
+        'enableQueryCache' => true,
+        'queryCacheDuration' => 3600,
+        'queryCache' => 'cache',// 使用 cache 组件
+	],
+	'cache' => [
+        'class' => 'yii\redis\Cache',
+        'redis' => 'redis',// 使用 redis 组件
+        'keyPrefix' => 'yii_',
+    ],
+	'redis' => [
+        'class' => 'yii\redis\Connection',
+        'hostname' => '127.0.0.1',
+        'port' => 6379,
+        // 'database' => 0,
+    ],
+],
 ```
+
+直接调用即可
+
+```php
 $query->cache(7200)->all();
 ```
 
