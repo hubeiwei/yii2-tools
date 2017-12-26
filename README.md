@@ -97,22 +97,22 @@ Command 能使用查询缓存，而且**每次**查询都会事先检查缓存�
 ```php
 'components' => [
     'db' => [
-		'class' => 'yii\db\Connection',
-		'dsn' => 'mysql:host=127.0.0.1;dbname=yii2',
-		'username' => 'root',
-		'password' => '123456',
-		'charset' => 'utf8',
-		// 以下3行都是默认值
+        'class' => 'yii\db\Connection',
+        'dsn' => 'mysql:host=127.0.0.1;dbname=yii2',
+        'username' => 'root',
+        'password' => '123456',
+        'charset' => 'utf8',
+        // 以下3行都是默认值
         'enableQueryCache' => true,
         'queryCacheDuration' => 3600,
         'queryCache' => 'cache',// 使用 cache 组件
-	],
-	'cache' => [
+    ],
+    'cache' => [
         'class' => 'yii\redis\Cache',
         'redis' => 'redis',// 使用 redis 组件
         'keyPrefix' => 'yii_',
     ],
-	'redis' => [
+    'redis' => [
         'class' => 'yii\redis\Connection',
         'hostname' => '127.0.0.1',
         'port' => 6379,
