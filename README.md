@@ -88,6 +88,12 @@ $query = new \hubeiwei\yii2tools\extensions\Query([
 ]);
 ```
 
+缓存：
+
+```
+$query->cache(7200)->all();
+```
+
 数字范围过滤：
 
 ```php
