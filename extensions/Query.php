@@ -20,7 +20,7 @@ class Query extends YiiQuery
             $db = Yii::$app->getDb();
         }
         $command = parent::createCommand($db);
-        if ($this->queryCacheDuration !== null || $this->queryCacheDependency !== null) {
+        if ($this->hasCache()) {
             $command->cache($this->queryCacheDuration, $this->queryCacheDependency);
         }
         return $command;

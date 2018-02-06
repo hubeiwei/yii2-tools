@@ -31,6 +31,25 @@ trait QueryCacheTrait
     }
 
     /**
+     * Disables query cache for this query.
+     * @return $this the query object itself
+     */
+    public function noCache()
+    {
+        $this->queryCacheDuration = -1;
+        return $this;
+    }
+
+    /**
+     * @see Command::cache() this has default duration
+     * @return bool
+     */
+    public function hasCache()
+    {
+        return $this->queryCacheDuration !== null || $this->queryCacheDependency !== null;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _queryScalar($selectExpression, $db)
@@ -68,7 +87,7 @@ trait QueryCacheTrait
             ->select([$selectExpression])
             ->from(['c' => $this])
             ->createCommand($db);
-        if ($this->queryCacheDuration !== null || $this->queryCacheDependency !== null) {
+        if ($this->hasCache()) {
             $command->cache($this->queryCacheDuration, $this->queryCacheDependency);
         }
         return $command->queryScalar();
