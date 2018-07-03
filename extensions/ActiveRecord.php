@@ -34,7 +34,7 @@ class ActiveRecord extends YiiActiveRecord
     public function getFirstErrorString()
     {
         if ($this->hasErrors()) {
-            return array_values($this->getErrors())[0][0];
+            return current($this->getFirstErrors());
         }
         return '';
     }
