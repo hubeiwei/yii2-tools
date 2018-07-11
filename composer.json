@@ -17,11 +17,12 @@
             "homepage": "http://hubeiwei.github.io"
         }
     ],
+    "minimum-stability": "stable",
     "require": {
         "yiisoft/yii2": "~2.0.14",
         "kartik-v/yii2-date-range": "1.6.7",
         "kartik-v/yii2-dynagrid": "*",
-        "kartik-v/yii2-export": "1.2.7",
+        "kartik-v/yii2-export": "*",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-widget-alert": "*",
         "kartik-v/yii2-widget-growl": "*",
