@@ -7,8 +7,8 @@ use kartik\export\ExportMenu as KartikExportMenu;
 /**
  * 后台大量使用该类时，为了减少重复配置，应该扩展出来
  *
- * @see \hubeiwei\yii2tools\helpers\RenderHelper::gridView()
- * @see \hubeiwei\yii2tools\helpers\RenderHelper::dynaGrid()
+ * @see \hubeiwei\yii2tools\helpers\Render::gridView()
+ * @see \hubeiwei\yii2tools\helpers\Render::dynaGrid()
  */
 class ExportMenu extends KartikExportMenu
 {

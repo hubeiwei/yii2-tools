@@ -23,4 +23,10 @@ class DataColumn extends KartikDataColumn
      * 默认不换行
      */
     public $noWrap = true;
+
+    public $filterOptions = [
+        'style' => [
+            'min-width' => '80px',
+        ],
+    ];
 }

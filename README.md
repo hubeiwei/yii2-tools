@@ -18,7 +18,7 @@
 
     * [日期范围查询的配置](#日期范围查询的配置)
 
-* [Widget](#Widget)
+* [Widget](#widget)
 
 * [消息提示](#消息提示)
 
@@ -173,8 +173,9 @@ public static function statusMap($value = null)
 ```php
 use common\models\User;
 use hubeiwei\yii2tools\grid\ActionColumn;
+use hubeiwei\yii2tools\grid\ExportMenu;
 use hubeiwei\yii2tools\grid\SerialColumn;
-use hubeiwei\yii2tools\helpers\RenderHelper;
+use hubeiwei\yii2tools\helpers\Render;
 use hubeiwei\yii2tools\widgets\DateRangePicker;
 use hubeiwei\yii2tools\widgets\Select2;
 
@@ -189,17 +190,7 @@ $this->title = '标题';
 $gridColumns = [
     ['class' => SerialColumn::className()],
 
-    // 枚举字段查询（下拉框）
-    [
-        'attribute' => 'status',
-        'value' => function ($model) {
-            return User::statusMap($model->status);
-        },
-        'filter' => RenderHelper::dropDownFilter($searchModel, 'status', User::statusMap()),
-        // 当然你在 filter 这里直接给 User::statusMap() 也可以，你对比一下就发现两种方法的区别了
-    ],
-
-    // 枚举字段查询（Select2）
+    // 枚举字段查询
     [
         'attribute' => 'status',
         'value' => function ($model) {
@@ -227,11 +218,32 @@ $gridColumns = [
 ];
 
 // GridView
-echo RenderHelper::gridView($dataProvider, $gridColumns, $searchModel);
+echo Render::gridView([
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'columns' => $gridColumns,
+    'export' => [
+        'exportConfig' => [
+            ExportMenu::FORMAT_HTML => false,
+            ExportMenu::FORMAT_TEXT => false,
+            ExportMenu::FORMAT_PDF => false,
+            ExportMenu::FORMAT_EXCEL => false,
+        ],
+        'pjaxContainerId' => 'kartik-grid-pjax',
+    ],
+]);
 
 // DynaGrid
-echo RenderHelper::dynaGrid('grid-id', $dataProvider, $gridColumns, $searchModel);
+echo Render::dynaGrid([
+    // 'id' => 'user-index',
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'columns' => $gridColumns,
+    'export' => true,
+]);
 ```
+
+> DynaGrid 需要配置模块才能使用，具体看[官方文档](https://github.com/kartik-v/yii2-dynagrid#module)，或者参考[我的](https://github.com/hubeiwei/hello-yii2/blob/master/config/modules.php#L40)。
 
 本节示例插件的 DEMO：
 
@@ -239,7 +251,7 @@ echo RenderHelper::dynaGrid('grid-id', $dataProvider, $gridColumns, $searchModel
 * [DateRangePicker](http://demos.krajee.com/date-range)
 * [GridView](http://demos.krajee.com/grid-demo)
 * [DynaGrid](http://demos.krajee.com/dynagrid-demo)
-* [Export](http://demos.krajee.com/export-demo)：使用 `RenderHelper::gridView()` 时需要把 $hasExport 参数设置为 true 才能使用导出，而 `RenderHelper::dynaGrid()` 我让它直接使用了
+* [Export](http://demos.krajee.com/export-demo)
 
 ## 消息提示
 
@@ -266,7 +278,7 @@ echo Alert::widget();
 echo Growl::widget();
 ```
 
-> 建议放在布局里，一劳永逸
+> 建议放在 layout 里，一劳永逸
 
 本节示例插件的 DEMO：
 
@@ -281,20 +293,12 @@ echo Growl::widget();
 
 * [Yii2 如何更好的在页面注入 CSS](https://getyii.com/topic/10)
 
-以下是一个视图的代码：
-
 ```php
 <?php
 
 use hubeiwei\yii2tools\widgets\CssBlock;
 use hubeiwei\yii2tools\widgets\JsBlock;
 use yii\web\View;
-
-/**
- * @var $this yii\web\View
- */
-
-$this->title = '标题';
 ?>
 
 <?php CssBlock::begin(); ?>
@@ -318,7 +322,7 @@ $this->title = '标题';
 
 ## 打赏
 
-如果觉得我做的东西对你有帮助的话，求打赏一杯 coffee，这样我会有更多动力去分享更多 yii2 的内容。
+如果觉得我做的东西对你有帮助的话，可以随意打赏一下，这样我会有更多动力去分享更多 yii2 的内容。
 
 <img src="https://raw.githubusercontent.com/hubeiwei/hubeiwei.github.io/master/images/pay/ali_pay.jpg" width="500px" alt="支付宝">
 
