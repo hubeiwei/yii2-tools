@@ -7,15 +7,6 @@ use kartik\growl\Growl as KartikGrowl;
 use Yii;
 use yii\bootstrap\Widget;
 
-/**
- * 输出消息用，建议放在 layout 里
- * ```php
- * <?= hubeiwei\yii2tools\widgets\Growl::widget() ?>
- * ```
- *
- * 设置消息请看 Message 类
- * @see Message
- */
 class Growl extends Widget
 {
     /**

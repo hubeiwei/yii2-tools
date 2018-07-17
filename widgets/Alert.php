@@ -7,15 +7,6 @@ use Yii;
 use yii\bootstrap\Alert as YiiAlert;
 use yii\bootstrap\Widget;
 
-/**
- * 输出消息用，建议放在 layout 里
- * ```php
- * <?= hubeiwei\yii2tools\widgets\Alert::widget() ?>
- * ```
- *
- * 设置消息请看 Message 类
- * @see Message
- */
 class Alert extends Widget
 {
     public $typeMap = [

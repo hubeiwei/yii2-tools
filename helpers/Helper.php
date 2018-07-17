@@ -25,12 +25,13 @@ class Helper
     }
 
     /**
+     * 分隔符替换为英文逗号
+     *
      * @param $value
      * @return string|array
      */
     public static function unifyLimiter($value)
     {
-        return str_replace([' ', '　', '，', '、', '
-'], ',', $value);// 不要取消换行！那是 newline
+        return str_replace([' ', '　', ';', '；', '，', '、', "\n"], ',', $value);
     }
 }

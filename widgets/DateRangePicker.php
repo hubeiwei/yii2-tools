@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 
 /**
- * 这个类是为了减少调用时的配置量，所以我会写死一些默认的配置，以及减少一些配置的层数
+ * 后台大量使用该类时，为了减少重复配置，应该扩展出来
  */
 class DateRangePicker extends KartikDateRangePicker
 {
