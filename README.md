@@ -1,10 +1,6 @@
 # yii2-tools
 
-自己在 yii2 上根据使用习惯来封装的一些东西，具体功能直接往下看吧。以后我有空会花时间把这些东西做成更灵活的可配置的。
-
-除了以下我给的一些使用方法，你也可以去看看[我的 DEMO](https://github.com/hubeiwei/hello-yii2)。
-
-> 语文不好，你看到这句话说明我已经大改了一次。
+使用 yii2 积累下来的一些东西，并不是为了有多好用，仅仅是为了减少每次调用时要写的代码罢了。
 
 ## 目录
 
@@ -40,19 +36,19 @@ composer require hubeiwei/yii2-tools 2.0.x-dev
 "hubeiwei/yii2-tools": "2.0.x-dev"
 ```
 
-> 由于查询缓存的功能[提交到了框架源码](https://github.com/yiisoft/yii2/pull/15398)，如果你的框架版本还是2.0.14之前的，可以把“dev-master”改成“1.0.x-dev”，就能使用了。
+> 如果你的框架版本还是2.0.14之前的，而且想用查询缓存的话，可以把版本号改成 1.0-beta，具体用法可以切换到该[标签](https://github.com/hubeiwei/yii2-tools/tree/v1.0-beta)，或者看框架2.0.14的更新记录，[查询缓存功能已经提交到了这个版本](https://github.com/yiisoft/yii2/pull/15398)。
 
-因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载下来，添加：
+因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载到 vendor 目录外，添加：
 
 ```
 "autoload": {
     "psr-4": {
-        "hubeiwei\\yii2tools\\": "path/to/hubeiwei/yii2-tools"
+        "hubeiwei\\yii2tools\\": "path/to/yii2-tools"
     }
 }
 ```
 
-然后把该项目的 composer.json 文件里 require 的包都加到你自己的 composer.json 里，执行 `composer update`。如果你已经有了这些包，直接执行 `composer dump-autoload` 即可。
+然后把该项目的 composer.json 文件里 require 的包都加到你自己的 composer.json 里，执行 `composer update`。
 
 ## 查询
 
