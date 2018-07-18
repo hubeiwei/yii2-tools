@@ -66,7 +66,7 @@ public static function find()
     return Yii::createObject('hubeiwei\yii2tools\extensions\ActiveQuery', [
         get_called_class(),
         [
-            'timeRangeSeparator' => '~',
+            'timeRangeSeparator' => '-',
         ],
     ]);
 }
@@ -131,7 +131,7 @@ $query->timeRangeFilter('time', $dateTimeRange, false, false);
 ```php
 // 这里配置的类需要根据你具体用到的 `ActiveQuery` 类而定。
 Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
-    'timeRangeSeparator' => '~',
+    'timeRangeSeparator' => '-',
 ]);
 ```
 
@@ -206,7 +206,7 @@ $gridColumns = [
         /*'filterWidgetOptions' => [
             'dateOnly' => true,
             'dateFormat' => 'Y/m/d',
-            'separator' => ' - ',
+            'separator' => ' - ',// 日期分隔符，配合日期范围查询使用
         ],*/
     ],
 
