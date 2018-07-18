@@ -26,12 +26,12 @@ class Render
     {
         /** @var \yii\data\DataProviderInterface $dataProvider */
         $dataProvider = ArrayHelper::getValue($config, 'dataProvider');
-        if (!$dataProvider instanceof DataProviderInterface) {
+        if (!($dataProvider instanceof DataProviderInterface)) {
             throw new InvalidConfigException('The "dataProvider" param must implement DataProviderInterface.');
         }
 
         $filterModel = ArrayHelper::getValue($config, 'filterModel');
-        if (!$filterModel instanceof Model) {
+        if (!empty($filterModel) && !($filterModel instanceof Model)) {
             throw new InvalidConfigException('The "filterModel" param must be instance of yii\base\Model');
         }
 
