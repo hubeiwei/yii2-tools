@@ -36,8 +36,6 @@ composer require hubeiwei/yii2-tools 2.0.x-dev
 "hubeiwei/yii2-tools": "2.0.x-dev"
 ```
 
-> 如果你的框架版本还是2.0.14之前的，而且想用查询缓存的话，可以把版本号改成 1.0-beta，具体用法可以切换到该[标签](https://github.com/hubeiwei/yii2-tools/tree/v1.0-beta)，或者看框架2.0.14的更新记录，[查询缓存功能已经提交到了这个版本](https://github.com/yiisoft/yii2/pull/15398)。
-
 因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载到 vendor 目录外，添加：
 
 ```
@@ -198,7 +196,7 @@ $gridColumns = [
         ],
     ],
 
-    // 时间范围查询
+    // 时间范围选择插件
     [
         'attribute' => 'created_at',
         'format' => 'dateTime',
@@ -258,9 +256,9 @@ use hubeiwei\yii2tools\helpers\Message;
 
 \Yii::$app->session->setFlash(Message::TYPE_INFO, 'some message');
 // or
-Message::setSuccessMsg('success message');
+Message::setSuccessMsg('操作成功');
 // or
-Message::setErrorMsg(['error1 message', 'error2 message']);
+Message::setErrorMsg(['错误1', '错误2']);
 ```
 
 输出消息：
@@ -278,8 +276,8 @@ echo Growl::widget();
 
 本节示例插件的 DEMO：
 
-* [Alert](http://v3.bootcss.com/components/#alerts)：这个没啥好说的，就是 bootstrap 的 Alert
-* [Growl](http://demos.krajee.com/widget-details/growl)：进去之后看到一个表单，提交后可以看到 Demo
+* [Alert](https://v3.bootcss.com/components/#alerts-dismissible)：这个没啥好说的，就是 bootstrap 的可关闭 Alert
+* [Growl](http://demos.krajee.com/widget-details/growl)：进去之后看到一个表单，提交后可以看到效果
 
 ## 在 View 如何更好的把 js 和 css 注入到布局
 
