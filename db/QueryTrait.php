@@ -1,6 +1,6 @@
 <?php
 
-namespace hubeiwei\yii2tools\extensions;
+namespace hubeiwei\yii2tools\db;
 
 use hubeiwei\yii2tools\helpers\Helper;
 

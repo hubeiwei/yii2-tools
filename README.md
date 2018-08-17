@@ -54,14 +54,14 @@ composer require hubeiwei/yii2-tools 2.0.x-dev
 
 以下3种方法自选一种：
 
-1:如果你 model 继承的类还是 `yii\db\ActiveRecord`，你可以改成 `hubeiwei\yii2tools\extensions\ActiveRecord`。
+1:如果你 model 继承的类还是 `yii\db\ActiveRecord`，你可以改成 `hubeiwei\yii2tools\db\ActiveRecord`。
 
 2:如果你已经有了自己的 `ActiveRecord` 类，但并没有 `ActiveQuery` 类，你可以把 `find()` 方法改成以下代码：
 
 ```php
 public static function find()
 {
-    return Yii::createObject('hubeiwei\yii2tools\extensions\ActiveQuery', [
+    return Yii::createObject('hubeiwei\yii2tools\db\ActiveQuery', [
         get_called_class(),
         [
             'timeRangeSeparator' => '-',
@@ -70,7 +70,7 @@ public static function find()
 }
 ```
 
-3:如果你已经有了自己的 `ActiveQuery` 和 `Query` 类，你可以直接引入我的 trait：`\hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait`。
+3:如果你已经有了自己的 `ActiveQuery` 和 `Query` 类，你可以直接引入我的 trait：`\hubeiwei\yii2tools\db\ActiveQuery\QueryTrait`。
 
 ### 开始使用
 
@@ -79,7 +79,7 @@ public static function find()
 ```php
 $query = \common\models\User::find();
 // or
-$query = new \hubeiwei\yii2tools\extensions\Query([
+$query = new \hubeiwei\yii2tools\db\Query([
     'timeRangeSeparator' => '-',
 ]);
 ```
@@ -128,7 +128,7 @@ $query->timeRangeFilter('time', $dateTimeRange, false, false);
 
 ```php
 // 这里配置的类需要根据你具体用到的 `ActiveQuery` 类而定。
-Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
+Yii::$container->set('hubeiwei\yii2tools\db\ActiveQuery', [
     'timeRangeSeparator' => '-',
 ]);
 ```
