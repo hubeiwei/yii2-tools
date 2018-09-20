@@ -19,7 +19,12 @@ class Render
      * GridView
      * 这里配置好了大量的默认设置，基本上直接调用就可以了，手机端也能适应
      *
-     * @param array $config
+     * @param array $config kartik\grid\GridView 类的属性
+     * 有部分特殊的参数如下：
+     *
+     * - `resetBtn`: 刷新按钮，默认为 true，也可以自定义 html 的内容，或者用 false 禁用。
+     * - `export`: kartik\export\ExportMenu 的属性，使用 true 启用，或使用数组自定义配置，不传该参数或者传 false 禁用
+     *
      * @return string
      */
     public static function gridView($config = [])
@@ -126,7 +131,12 @@ class Render
      * DynaGrid
      * 这里配置好了大量的默认设置，基本上直接调用就可以了，手机端也能适应
      *
-     * @param array $config
+     * @param array $config kartik\grid\GridView 类的属性
+     * 有部分特殊的参数如下：
+     *
+     * - `resetBtn`: 刷新按钮，默认为 true，也可以自定义 html 的内容，或者用 false 禁用。
+     * - `export`: kartik\export\ExportMenu 的属性，使用 true 启用，或使用数组自定义配置，不传该参数或者传 false 禁用
+     *
      * @return string
      */
     public static function dynaGrid($config = [])
