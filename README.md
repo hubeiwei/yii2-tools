@@ -14,6 +14,8 @@
 
     * [日期范围查询的配置](#日期范围查询的配置)
 
+* [验证器](#验证器)
+
 * [Widget](#widget)
 
 * [消息提示](#消息提示)
@@ -134,6 +136,39 @@ Yii::$container->set('hubeiwei\yii2tools\db\ActiveQuery', [
 ```
 
 3:`Query` 类需要在实例化的时候修改，参考[开始使用](#开始使用)的实例化部分。
+
+## 验证器
+
+目前提供了3个验证器：
+
+* 中文验证器：`hubeiwei\yii2tools\validators\ChineseValidator`
+
+* 身份证验证器：`hubeiwei\yii2tools\validators\IdCardValidator`
+
+* 手机号验证器：`hubeiwei\yii2tools\validators\MobileValidator`
+
+常规用法：
+
+```php
+use hubeiwei\yii2tools\validators\ChineseValidator;
+
+$chineseValidator = new ChineseValidator();
+if (!$chineseValidator->validate($value)) {
+    // 必须包含中文
+}
+$chineseValidator->chineseOnly = true;
+if (!$chineseValidator->validate($value)) {
+    // 必须为纯中文
+}
+```
+
+在 rules 中使用：
+
+```php
+use hubeiwei\yii2tools\validators\IdCardValidator;
+
+['id_card', IdCardValidator::class],
+```
 
 ## Widget
 
