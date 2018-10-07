@@ -2,9 +2,9 @@
 
 namespace hubeiwei\yii2tools\helpers;
 
-use hubeiwei\yii2tools\grid\ExportMenu;
-use hubeiwei\yii2tools\grid\GridView;
 use kartik\dynagrid\DynaGrid;
+use kartik\export\ExportMenu;
+use kartik\grid\GridView;
 use liyunfang\pager\LinkPager;
 use Yii;
 use yii\base\InvalidConfigException;

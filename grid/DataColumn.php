@@ -3,6 +3,7 @@
 namespace hubeiwei\yii2tools\grid;
 
 use kartik\grid\DataColumn as KartikDataColumn;
+use kartik\grid\GridView;
 
 /**
  * 后台大量使用该类时，为了减少重复配置，应该扩展出来
