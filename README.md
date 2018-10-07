@@ -172,33 +172,6 @@ use hubeiwei\yii2tools\validators\IdCardValidator;
 
 ## Widget
 
-下面代码是枚举字段查询用到的，仅仅是提供一种方便维护的参考，如果你有自己的解决方案可以跳过。
-
-```php
-use yii\helpers\ArrayHelper;
-
-const STATUS_ACTIVE = 1;
-const STATUS_INACTIVE = 0;
-
-/**
- * @param int $value
- * @return array|string|null
- */
-public static function statusMap($value = null)
-{
-    $map = [
-        self::STATUS_ACTIVE => '启用',
-        self::STATUS_INACTIVE => '禁用',
-    ];
-    if ($value === null) {
-        return $map;
-    }
-    return ArrayHelper::getValue($map, $value);
-}
-```
-
-以下是一个视图的代码：
-
 ```php
 use common\models\User;
 use hubeiwei\yii2tools\grid\ActionColumn;
@@ -214,22 +187,8 @@ use hubeiwei\yii2tools\widgets\Select2;
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 
-$this->title = '标题';
-
 $gridColumns = [
     ['class' => SerialColumn::className()],
-
-    // 枚举字段查询
-    [
-        'attribute' => 'status',
-        'value' => function ($model) {
-            return User::statusMap($model->status);
-        },
-        'filterType' => Select2::className(),
-        'filterWidgetOptions' => [
-            'data' => User::statusMap(),
-        ],
-    ],
 
     // 时间范围选择插件
     [
@@ -251,15 +210,7 @@ echo Render::gridView([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => $gridColumns,
-    'export' => [
-        'exportConfig' => [
-            ExportMenu::FORMAT_HTML => false,
-            ExportMenu::FORMAT_TEXT => false,
-            ExportMenu::FORMAT_PDF => false,
-            ExportMenu::FORMAT_EXCEL => false,
-        ],
-        'pjaxContainerId' => 'kartik-grid-pjax',
-    ],
+    'pjaxContainerId' => 'kartik-grid-pjax',
 ]);
 
 // DynaGrid
@@ -268,7 +219,6 @@ echo Render::dynaGrid([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'columns' => $gridColumns,
-    'export' => true,
 ]);
 ```
 
@@ -276,7 +226,6 @@ echo Render::dynaGrid([
 
 本节示例插件的 DEMO：
 
-* [Select2](http://demos.krajee.com/widget-details/select2)
 * [DateRangePicker](http://demos.krajee.com/date-range)
 * [GridView](http://demos.krajee.com/grid-demo)
 * [DynaGrid](http://demos.krajee.com/dynagrid-demo)
