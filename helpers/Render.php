@@ -24,6 +24,7 @@ class Render
      *
      * - `resetBtn`: 刷新按钮，默认为 true，也可以自定义 html 的内容，或者用 false 禁用。
      * - `export`: kartik\export\ExportMenu 的属性，使用 true 启用，或使用数组自定义配置，不传该参数或者传 false 禁用
+     * - `pjaxContainerId`: pjax 容器的 ID，默认为 kartik-grid-pjax
      *
      * @return string
      */
@@ -32,7 +33,7 @@ class Render
         /** @var \yii\data\DataProviderInterface $dataProvider */
         $dataProvider = ArrayHelper::getValue($config, 'dataProvider');
         if (!($dataProvider instanceof DataProviderInterface)) {
-            throw new InvalidConfigException('The "dataProvider" param must implement DataProviderInterface.');
+            throw new InvalidConfigException('The "dataProvider" param must implement yii\data\DataProviderInterface.');
         }
 
         $filterModel = ArrayHelper::getValue($config, 'filterModel');
@@ -44,6 +45,8 @@ class Render
         if (!is_array($columns) || empty($columns)) {
             throw new InvalidConfigException('The "columns" param must be a not null array');
         }
+
+        $pjaxId = ArrayHelper::remove($config, 'pjaxContainerId', 'kartik-grid-pjax');
 
         $gridDefaultConfig = [
             'dataColumnClass' => 'hubeiwei\yii2tools\grid\DataColumn',
@@ -59,7 +62,6 @@ class Render
             'pjax' => true,
             'pjaxSettings' => [
                 'options' => [
-                    'id' => 'kartik-grid-pjax',
                     'scrollTo' => true,
                 ],
             ],
@@ -110,18 +112,19 @@ class Render
                     ExportMenu::FORMAT_PDF => false,
                     ExportMenu::FORMAT_EXCEL => false,
                 ],
-                'pjaxContainerId' => 'kartik-grid-pjax',
             ];
             if (is_array($exportConfig) && !empty($exportConfig)) {
                 $exportConfig = ArrayHelper::merge($exportDefaultConfig, $exportConfig);
             } else {
                 $exportConfig = $exportDefaultConfig;
             }
+            $exportConfig['pjaxContainerId'] = $pjaxId;
             $exportMenu = ExportMenu::widget($exportConfig);
             array_unshift($toolbar, $exportMenu);
         }
 
         $gridConfig = ArrayHelper::merge($gridDefaultConfig, $config);
+        $gridConfig['pjaxSettings']['options']['id'] = $pjaxId;
         $gridConfig['toolbar'] = $toolbar;
 
         return GridView::widget($gridConfig);

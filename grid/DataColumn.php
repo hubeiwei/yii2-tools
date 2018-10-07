@@ -5,9 +5,6 @@ namespace hubeiwei\yii2tools\grid;
 use kartik\grid\DataColumn as KartikDataColumn;
 use kartik\grid\GridView;
 
-/**
- * 后台大量使用该类时，为了减少重复配置，应该扩展出来
- */
 class DataColumn extends KartikDataColumn
 {
     /**
@@ -15,14 +12,8 @@ class DataColumn extends KartikDataColumn
      */
     public $hAlign = GridView::ALIGN_CENTER;
 
-    /**
-     * 垂直居中
-     */
     public $vAlign = GridView::ALIGN_MIDDLE;
 
-    /**
-     * 默认不换行
-     */
     public $noWrap = true;
 
     public $filterOptions = [
