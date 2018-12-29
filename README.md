@@ -31,16 +31,18 @@
 执行：
 
 ```
-composer require hubeiwei/yii2-tools 1.0.x-dev
+composer require hubeiwei/yii2-tools 1.1.x-dev
 ```
 
 或者添加：
 
 ```
-"hubeiwei/yii2-tools": "1.0.x-dev"
+"hubeiwei/yii2-tools": "1.1.x-dev"
 ```
 
-因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接抄代码，或者把代码下载到 vendor 目录外，添加：
+> 由于查询缓存的功能[提交到了框架源码](https://github.com/yiisoft/yii2/pull/15398)，如果你的框架版本还是2.0.14之前的，可以把“dev-master”改成“1.0.x-dev”，就能使用了。
+
+因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载下来，添加：
 
 ```
 "autoload": {
@@ -86,47 +88,6 @@ $query = \common\models\User::find();
 $query = new \hubeiwei\yii2tools\extensions\Query([
     'timeRangeSeparator' => '-',
 ]);
-```
-
-缓存：
-
-`yii\db\Connection::$enableQueryCache` 默认为 true，`yii\db\Command` 在查询之前会检查缓存，除非你禁用该配置。
-
-`yii\db\Query` 和 `yii\db\ActiveQuery` 是通过 `createCommand()` 实例化 `yii\db\Command` 进行查询的，但这两个类并不能设置缓存，所以我做了一些修改。
-
-配置文件参考：
-
-```php
-'components' => [
-    'db' => [
-        'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=127.0.0.1;dbname=yii2',
-        'username' => 'root',
-        'password' => '123456',
-        'charset' => 'utf8',
-        // 以下3行是查询缓存的配置，都是默认值
-        'enableQueryCache' => true,
-        'queryCacheDuration' => 3600,
-        'queryCache' => 'cache',// 使用 cache 组件
-    ],
-    'cache' => [
-        'class' => 'yii\redis\Cache',
-        'redis' => 'redis',// 使用 redis 组件
-        'keyPrefix' => 'yii_',
-    ],
-    'redis' => [
-        'class' => 'yii\redis\Connection',
-        'hostname' => '127.0.0.1',
-        'port' => 6379,
-        // 'database' => 0,
-    ],
-],
-```
-
-直接调用即可
-
-```php
-$query->cache(7200)->all();
 ```
 
 数字范围查询：
