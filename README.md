@@ -7,13 +7,13 @@
 执行：
 
 ```
-composer require hubeiwei/yii2-tools dev-master
+composer require hubeiwei/yii2-tools 1.0.x-dev
 ```
 
 或者添加：
 
 ```
-"hubeiwei/yii2-tools": "dev-master"
+"hubeiwei/yii2-tools": "1.0.x-dev"
 ```
 
 因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载下来，在 composer.json 里添加：
