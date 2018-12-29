@@ -6,6 +6,26 @@
 
 > 语文不好，你看到这句话说明我已经大改了一次。
 
+## 目录
+
+* [安装](#安装)
+
+* [查询](#查询)
+
+    * [准备工作](#准备工作)
+
+    * [开始使用](#开始使用)
+
+    * [日期范围查询的配置](#日期范围查询的配置)
+
+* [Widget](#Widget)
+
+* [消息提示](#消息提示)
+
+* [在 View 如何更好的把 js 和 css 注入到布局](#在-view-如何更好的把-js-和-css-注入到布局)
+
+* [打赏](#打赏)
+
 ## 安装
 
 执行：
@@ -20,7 +40,7 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 "hubeiwei/yii2-tools": "1.0.x-dev"
 ```
 
-因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接把代码下载下来，添加：
+因为是我自己用的东西，灵活性不一定高，如果你觉得这些代码不能100%满足你，你需要进行一些改动的话，你可以直接抄代码，或者把代码下载到 vendor 目录外，添加：
 
 ```
 "autoload": {
@@ -30,24 +50,23 @@ composer require hubeiwei/yii2-tools 1.0.x-dev
 }
 ```
 
-然后把我 composer.json 文件里 require 的包都加到你自己的 composer.json 里，执行 `composer update`。如果你已经有了这些包，直接执行 `composer dump-autoload` 即可。
+然后把该项目的 composer.json 文件里 require 的包都加到你自己的 composer.json 里，执行 `composer update`。如果你已经有了这些包，直接执行 `composer dump-autoload` 即可。
 
-## model
+## 查询
 
-`ActiveQuery` 和 `Query` 类通过 `hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait` 来获得数字范围过滤以及日期范围过滤的功能。
+### 准备工作
 
-使用方法有以下3种：
+以下3种方法自选一种：
 
 1:如果你 model 继承的类还是 `yii\db\ActiveRecord`，你可以改成 `hubeiwei\yii2tools\extensions\ActiveRecord`。
 
-2:如果你已经有了自己的 `ActiveRecord` 类，但并没有 `ActiveQuery` 类，你可以重写 `find()` 方法改成类似如下的代码：
+2:如果你已经有了自己的 `ActiveRecord` 类，但并没有 `ActiveQuery` 类，你可以把 `find()` 方法改成以下代码：
 
 ```php
 public static function find()
 {
     return Yii::createObject('hubeiwei\yii2tools\extensions\ActiveQuery', [
         get_called_class(),
-        // 如果你想把下面的配置在这段代码里分离，就继续往下看。
         [
             'timeRangeSeparator' => '~',
         ],
@@ -57,26 +76,7 @@ public static function find()
 
 3:如果你已经有了自己的 `ActiveQuery` 和 `Query` 类，你可以直接引入我的 trait：`\hubeiwei\yii2tools\extensions\ActiveQuery\QueryTrait`。
 
-### 配置
-
-日期范围过滤的默认分割字符串是“-”，如果你想修改这个配置，方法如下：
-
-1:常规方法，在 `ActiveRecord::find()` 方法里实例化后重新赋值后返回（就是使用方法里的第2条），或者在调用这个方法后重新赋值。
-
-2:DI 容器，在你的 bootstrap.php 文件添加以下代码：
-
-```php
-// 因为存在上面的第3种使用方法，这里配置的类需要根据你具体用到的 `ActiveQuery` 类而定。
-Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
-    'timeRangeSeparator' => '~',
-]);
-```
-
-> basic 模板没有 bootstrap.php 文件，可以参考 advanced 模板。
-
-`Query` 类可以在实例化之后修改，也可以继续往下看其他修改方法。
-
-### 查询
+### 开始使用
 
 实例化 `ActiveQuery` 或 `Query`：
 
@@ -84,15 +84,17 @@ Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
 $query = \common\models\User::find();
 // or
 $query = new \hubeiwei\yii2tools\extensions\Query([
-    'timeRangeSeparator' => '~',
+    'timeRangeSeparator' => '-',
 ]);
 ```
 
 缓存：
 
-Command 能使用查询缓存，而且**每次**查询都会事先检查缓存，Query 和 ActiveQuery 查询是通过 createCommand 来使用 Command 查询的，但这两个类并不能设置缓存，所以我做了一些修改。
+`yii\db\Connection::$enableQueryCache` 默认为 true，`yii\db\Command` 在查询之前会检查缓存，除非你禁用该配置。
 
-开启缓存的配置其实已经默认给你开好了，如果禁用掉的话查询就不会检查缓存了。
+`yii\db\Query` 和 `yii\db\ActiveQuery` 是通过 `createCommand()` 实例化 `yii\db\Command` 进行查询的，但这两个类并不能设置缓存，所以我做了一些修改。
+
+配置文件参考：
 
 ```php
 'components' => [
@@ -102,7 +104,7 @@ Command 能使用查询缓存，而且**每次**查询都会事先检查缓存�
         'username' => 'root',
         'password' => '123456',
         'charset' => 'utf8',
-        // 以下3行都是默认值
+        // 以下3行是查询缓存的配置，都是默认值
         'enableQueryCache' => true,
         'queryCacheDuration' => 3600,
         'queryCache' => 'cache',// 使用 cache 组件
@@ -127,7 +129,7 @@ Command 能使用查询缓存，而且**每次**查询都会事先检查缓存�
 $query->cache(7200)->all();
 ```
 
-数字范围过滤：
+数字范围查询：
 
 ```php
 // WHERE money = 1
@@ -137,63 +139,48 @@ $query->compare('money', 1);
 $query->compare('money', '>1,,<3 =2');
 ```
 
-日期范围过滤：
+日期范围查询：
 
 ```php
 $dateRange = '2017/01/01 - 2018/01/01';
 
 // WHERE time BETWEEM 1483200000 AND 1514822399
-$query->timeRangeFilter('time', $dateRange, true);
+$query->timeRangeFilter('time', $dateRange, true, true);
 
 // WHERE time BETWEEM '2017/01/01 00:00:00' AND '2018/01/01 23:59:59'
 $query->timeRangeFilter('time', $dateRange, true, false);
 ```
 
-时间范围过滤：
+时间范围查询：
 
 ```php
 $dateTimeRange = '2017/01/01 01:01:01 - 2018/01/01 23:59:59';
 
 // WHERE time BETWEEM 1483203661 AND 1514822399
-$query->timeRangeFilter('time', $dateTimeRange);
+$query->timeRangeFilter('time', $dateTimeRange, false, true);
 
 // WHERE time BETWEEM '2017/01/01 01:01:01' AND '2018/01/01 23:59:59'
 $query->timeRangeFilter('time', $dateTimeRange, false, false);
 ```
 
-附：`Query` 类还有更多的实例化方法，例如通过 DI 容器来配置，并可以通过注释来提供代码提示：
+### 日期范围查询配置
+
+日期范围查询的默认分割字符串是“-”，如果你想修改这个配置，方法如下：
+
+1:参考[准备工作](#准备工作)里的第2条，单这里就有至少3种做法。
+
+2:DI 容器，如果你是用 `Yii::createObject()` 实例化 `ActiveQuery`，在你的 bootstrap.php 文件添加以下代码：
 
 ```php
-use hubeiwei\yii2tools\extensions\Query;
-
-/** @var $query Query */
-
-// 设置
-Yii::$container->set(Query::className(), [
+// 这里配置的类需要根据你具体用到的 `ActiveQuery` 类而定。
+Yii::$container->set('hubeiwei\yii2tools\extensions\ActiveQuery', [
     'timeRangeSeparator' => '~',
 ]);
-// 实例化
-$query = Yii::createObject(Query::className());
-$query = Yii::$container->get(Query::className());
-
-// 设置
-Yii::$container->set('query', [
-    'class' => 'hubeiwei\yii2tools\extensions\Query',
-    'timeRangeSeparator' => '~',
-]);
-// 或
-Yii::$container->set('query', function () {
-    return new \hubeiwei\yii2tools\extensions\Query([
-        'timeRangeSeparator' => '~',
-    ]);
-});
-// 实例化
-$query = Yii::$container->get('query');
 ```
 
-> 设置这一步是在 bootstrap.php 文件进行的。
+3:`Query` 类需要在实例化的时候修改，参考[开始使用](#开始使用)的实例化部分。
 
-## widget
+## Widget
 
 下面代码是枚举字段查询用到的，仅仅是提供一种方便维护的参考，如果你有自己的解决方案可以跳过。
 
@@ -213,14 +200,14 @@ public static function statusMap($value = null)
         self::STATUS_ACTIVE => '启用',
         self::STATUS_INACTIVE => '禁用',
     ];
-    if ($value == null) {
+    if ($value === null) {
         return $map;
     }
     return ArrayHelper::getValue($map, $value);
 }
 ```
 
-view:
+以下是一个视图的代码：
 
 ```php
 use common\models\User;
@@ -236,10 +223,12 @@ use hubeiwei\yii2tools\widgets\Select2;
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 
+$this->title = '标题';
+
 $gridColumns = [
     ['class' => SerialColumn::className()],
 
-    // 枚举字段过滤（Html::dropDownList()）
+    // 枚举字段查询（下拉框）
     [
         'attribute' => 'status',
         'value' => function ($model) {
@@ -249,7 +238,7 @@ $gridColumns = [
         // 当然你在 filter 这里直接给 User::statusMap() 也可以，你对比一下就发现两种方法的区别了
     ],
 
-    // 枚举字段过滤（Select2）
+    // 枚举字段查询（Select2）
     [
         'attribute' => 'status',
         'value' => function ($model) {
@@ -261,7 +250,7 @@ $gridColumns = [
         ],
     ],
 
-    // 时间范围过滤，查询的代码已经在上面有给出
+    // 时间范围查询
     [
         'attribute' => 'created_at',
         'format' => 'dateTime',
@@ -269,7 +258,7 @@ $gridColumns = [
         /*'filterWidgetOptions' => [
             'dateOnly' => true,
             'dateFormat' => 'Y/m/d',
-            'separator' => ' ~ ',
+            'separator' => ' - ',
         ],*/
     ],
 
@@ -323,13 +312,15 @@ echo Growl::widget();
 * [Alert](http://v3.bootcss.com/components/#alerts)：这个没啥好说的，就是 bootstrap 的 Alert
 * [Growl](http://demos.krajee.com/widget-details/growl)：进去之后看到一个表单，提交后可以看到 Demo
 
-## 在 view 如何更好的把 js 和 css 注入到布局
+## 在 View 如何更好的把 js 和 css 注入到布局
 
 来源：
 
 * [Yii2 如何更好的在页面注入 JavaScript](https://getyii.com/topic/9)
 
 * [Yii2 如何更好的在页面注入 CSS](https://getyii.com/topic/10)
+
+以下是一个视图的代码：
 
 ```php
 <?php
@@ -341,6 +332,8 @@ use yii\web\View;
 /**
  * @var $this yii\web\View
  */
+
+$this->title = '标题';
 ?>
 
 <?php CssBlock::begin(); ?>
