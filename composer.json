@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "hubeiwei\\yii2tools\\": ""
+            "hubeiwei\\yii2tools\\": "src"
         }
     }
 }
