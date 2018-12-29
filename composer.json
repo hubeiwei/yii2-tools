@@ -26,7 +26,6 @@
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-widget-alert": "*",
         "kartik-v/yii2-widget-growl": "*",
-        "kartik-v/yii2-widget-select2": "*",
         "liyunfang/yii2-widget-linkpager": "*"
     },
     "autoload": {
