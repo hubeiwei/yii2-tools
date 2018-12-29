@@ -31,13 +31,13 @@
 执行：
 
 ```
-composer require hubeiwei/yii2-tools 1.1.x-dev
+composer require hubeiwei/yii2-tools 2.0.x-dev
 ```
 
 或者添加：
 
 ```
-"hubeiwei/yii2-tools": "1.1.x-dev"
+"hubeiwei/yii2-tools": "2.0.x-dev"
 ```
 
 > 由于查询缓存的功能[提交到了框架源码](https://github.com/yiisoft/yii2/pull/15398)，如果你的框架版本还是2.0.14之前的，可以把“dev-master”改成“1.0.x-dev”，就能使用了。
